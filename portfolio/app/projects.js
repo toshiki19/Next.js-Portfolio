@@ -1,13 +1,15 @@
-import AnimatedText from '@/components/animatedText'
-import Layout from '@/components/layout'
+
 import React from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
-import { GithubIcon } from '@/components/icons'
 import Image from 'next/image'
-import project_1 from '../../public/images/projects/crypto-screener-cover-image.jpg'
-import { motion } from 'framer-motion';
+import { GithubIcon } from '@/components/icons'
 import TransitionEvent from '@/components/transitionEffect';
+import AnimatedText from '@/components/animatedText'
+import Layout from '@/components/layout'
+import project_1 from '../public/images/projects/crypto-screener-cover-image.jpg'
+import { motion } from 'framer-motion';
+
 
 const FramerImage = motion(Image);
 

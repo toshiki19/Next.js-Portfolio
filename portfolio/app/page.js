@@ -1,14 +1,13 @@
-import Layout from '@/components/layout'
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
+import Layout from '@/components/layout'
 import AnimatedText from '@/components/animatedText'
 import HireMe from '@/components/hireMe'
 import TransitionEffect from '@/components/transitionEffect'
 import { LinkArrow } from '@/components/icons'
 import profilePic from '../public/images/profile/i-zi-_1.png'
 import lightBulb from '../public/images/svgs/miscellaneous_icons_1.svg'
-
 
 export default function Home() {
   return (

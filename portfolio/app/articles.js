@@ -1,18 +1,16 @@
-import React, { use } from 'react'
+import React, { use, useRef } from 'react'
+import { motion, useMotionValue } from 'framer-motion';
 import Head from 'next/head'
-import Layout from '@/components/layout'
-import AnimatedText from '@/components/animatedText';
 import Link from 'next/link'
 import Image from 'next/image'
-import article_1 from '../../public/images/articles/pagination component in reactjs.jpg'
-import article_2 from '../../public/images/articles/create loading screen in react js.jpg'
-import article_3 from '../../public/images/articles/create modal component in react using react portals.png'
-import article_4 from '../../public/images/articles/form validation in reactjs using custom react hook.png'
-import article_5 from '../../public/images/articles/smooth scrolling in reactjs.png'
-import { motion } from 'framer-motion';
-import { useRef } from 'react';
-import { useMotionValue } from 'framer-motion';
 import TransitionEvent from '@/components/transitionEffect';
+import Layout from '@/components/layout'
+import AnimatedText from '@/components/animatedText';
+import article_1 from '../public/images/articles/pagination component in reactjs.jpg'
+import article_2 from '../public/images/articles/create loading screen in react js.jpg'
+import article_3 from '../public/images/articles/create modal component in react using react portals.png'
+import article_4 from '../public/images/articles/form validation in reactjs using custom react hook.png'
+import article_5 from '../public/images/articles/smooth scrolling in reactjs.png'
 
 const FramerImage = motion(Image);
 
