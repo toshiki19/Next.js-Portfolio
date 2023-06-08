@@ -1,100 +1,171 @@
-import React, { useEffect, useRef } from 'react'
+import React, { use } from 'react'
 import Head from 'next/head'
-import AnimatedText from '@/components/animatedText'
 import Layout from '@/components/layout'
+import AnimatedText from '@/components/animatedText';
+import Link from 'next/link'
 import Image from 'next/image'
-import profilePic from '../../public/images/profile/i-zi-_2.png'
-import { useInView, useMotionValue, useSpring } from 'framer-motion';
-import Skills from '@/components/skills'
-import Experience from '@/components/experience'
-import Education from '@/components/education'
+import article_1 from '../../public/images/articles/pagination component in reactjs.jpg'
+import article_2 from '../../public/images/articles/create loading screen in react js.jpg'
+import article_3 from '../../public/images/articles/create modal component in react using react portals.png'
+import article_4 from '../../public/images/articles/form validation in reactjs using custom react hook.png'
+import article_5 from '../../public/images/articles/smooth scrolling in reactjs.png'
+import { motion } from 'framer-motion';
+import { useRef } from 'react';
+import { useMotionValue } from 'framer-motion';
+import TransitionEvent from '@/components/transitionEffect';
 
-const AnimatedNumber = ({value}) => {
-    const ref = useRef(null);
+const FramerImage = motion(Image);
 
-    const motionValue = useMotionValue(0);
-    const springValue = useSpring(motionValue, { duration: 3000 });
-    const isInView = useInView(ref, {once: true});
+const MovingImg = ({title, img, link}) => {
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const imgRef = useRef(null);
 
-    useEffect(() => {
-        if (isInView) {
-            motionValue.set(value);
-        }
-    }, [isInView, motionValue, value]);
+  function handleMouse(event){
+    imgRef.current.style.display = 'inline-block';
+    x.set(event.pageX);
+    y.set(-10);
+  }
 
-    useEffect(() => {
-        springValue.on("change", (latest) => {
-            if (ref.current && latest.toFixed(0) <= value) {
-                ref.current.textContent = latest.toFixed(0);
-            }
-        })
-    }, [springValue, value]);
+  function handleMouseLeave(event){
+    imgRef.current.style.display = 'none';
+    x.set(0);
+    y.set(0);
+  }
 
-    return <span ref={ref}></span>
+  return (
+    <Link href={link} target="_blank"
+    onMouseMove={handleMouse}
+    onMouseLeave={handleMouseLeave}
+    >
+      <h2 className='capitalize text-xl font-semibold hover:underline'>{title}</h2>
+      <FramerImage
+      style={{x:x, y:y}}
+      initial={{opacity:0}}
+      whileInView={{opacity:1, transition:{duration:0.2}}}
+      ref={imgRef}
+      src={img} alt={title} className='z-10 w-96 h-auto hidden absolute rounded-lg md:!hidden' />
+    </Link>
+  )
 }
 
-const about = () => {
+
+const Article = ({title, img, link, date}) => {
+  return (
+    <motion.li
+    initial={{y:200}}
+    whileInView={{y:0, transition:{duration:0.5, ease:'easeInOut'}}}
+    viewport={{once:true}}
+    className='relative w-full p-4 py-6 my-4 rounded-xl flex items-center
+    justify-between bg-light text-dark first:mt-0 border border-solid border-dark
+    border-r-4 border-b-4 dark:border-light dark:bg-dark dark:text-light sm:flex-col'>
+      <MovingImg title={title} img={img} link={link} />
+      <span className='text-primary font-semibold pl-4 dark:text-primaryDark sm:self-start sm:pl-0 xs:text-sm'>{date}</span>
+    </motion.li>
+  )
+}
+
+const FeaturedArticle = ({title, summary, img, link, time}) => {
+  return (
+    <li className='relative col-span-1 w-full p-4 bg-light border border-solid border-dark rounded-2xl dark:bg-dark dark:border-light'>
+      <div className='absolute top-0 -right-3 -z-10 w-[101%] h-[103%] bg-dark rounded-[2rem]
+      rounded-br-3xl'/>
+      <Link href={link} target="_blank"
+      className='w-full inline-block cursor-printer overflow-hidden rounded-lg'>
+        <FramerImage src={img} alt={title} className='w-full h-auto' 
+        whileHover={{scale:1.05}}
+        transition={{duration:0.2}}
+        priority
+        sizes='(max-width: 768px) 100vw,
+        (max-width: 1200px) 50vw,
+        33vw'
+        />
+      </Link>
+      <Link href={link} target="_blank">
+        <h2 className='my-2 capitalize text-2xl font-bold mt-4 hover:underline xs:text-lg'>{title}</h2>
+      </Link>
+      <p className='mb-2 text-sm'>{summary}</p>
+      <span className='text-primary font-semibold dark:text-primaryDark'>{time}</span>
+    </li>
+  )
+}
+
+const articles = () => {
   return (
     <>
-        <Head>
-            <title>CodeBucks | About Page</title>
-            <meta name="description" content="CodeBucks is a blog website for developers and designers" />
-        </Head>
-        <main className='flex w-full flex-col items-center justify-center'>
-            <Layout className='pt-16'>
-            <AnimatedText text="About Page" className='mb-16'/>
-            <div className='grid w-full grid-cols-8 gap-16'>
-                <div className='col-span-3 flex flex-col items-start justify-start'>
-                    <h2 className='mb-4 text-lg font-bold uppercase text-dark/75'>Biography</h2>
-                    <p className='font-medium'>
-                    Hi, I'm CodeBucks, a web developer and UI/UX designer with a passion for creating beautiful, functional, 
-and user-centered digital experiences. With 4 years of experience in the field. I am always looking for 
-new and innovative ways to bring my clients' visions to life.
-                    </p>
-                    <p className='font-medium my-4'>
-                    I believe that design is about more than just making things look pretty – it's about solving problems and 
-creating intuitive, enjoyable experiences for users.
-                    </p>
-                    <p className='font-medium'>
-                    Whether I'm working on a website, mobile app, or 
-other digital product, I bring my commitment to design excellence and user-centered thinking to 
-every project I work on. I look forward to the opportunity to bring my skills and passion to your next project.
-                    </p>
-                </div>
-                <div className='col-span-3 relative h-max rounded-2xl border-2 border-solid border-dark
-                bg-light p-8'>
-                    <div className='absolute top-0 -right-3 -z-10 w-[102%] h-[103%] rounded-[2rem] 
-                    bg-dark' />
-                    <Image src={profilePic} alt="CodeBucks" className="w-full h-auto rounded-2xl" />
-                </div>
-                <div className='col-span-2 flex flex-col items-end justify-between'>
-                    <div className='flex flex-col items-end justify-center'>
-                        <span className='inline-block text-7xl font-bold'>
-                            <AnimatedNumber value={50} />+
-                        </span>
-                        <h2 className='text-xl font-medium capitalize text-dark/75'>satisfied clients</h2>
-                    </div>
-                    <div className='flex flex-col items-end justify-center'>
-                        <span className='inline-block text-7xl font-bold'>
-                            <AnimatedNumber value={40} />+
-                        </span>
-                        <h2 className='text-xl font-medium capitalize text-dark/75'>projects completed</h2>
-                    </div>
-                    <div className='flex flex-col items-end justify-center'>
-                        <span className='inline-block text-7xl font-bold'>
-                            <AnimatedNumber value={4} />+
-                        </span>
-                        <h2 className='text-xl font-medium capitalize text-dark/75'>years of experience</h2>
-                    </div>
-                </div>
-            </div>
-            <Skills />
-            <Experience />
-            <Education />
-            </Layout>
-        </main>
+    <Head>
+      <title>CodeBucks | Articles Page</title>
+      <meta name="description" content="any description" />
+    </Head>
+    <TransitionEvent />
+    <main className='w-full mb-16 flex flex-col items-center justify-center overflow-hidden dark:text-light'>
+      <Layout className='pt-16'>
+        <AnimatedText text="articles Page" className='mb-16 lg:!text-7xl sm:md-8 sm:!text-6xl xs:!text-4xl'/>
+        <ul className='grid grid-cols-2 gap-16 lg:gap-8 md:grid-cols-1 md:gap-y-16'>
+          <FeaturedArticle
+          title="Build A Custom Pagination Component In Reactjs From Scratch"
+          summary="Learn how to build a custom pagination component in ReactJS from scratch. Follow this step-by-step guide to integrate Pagination component in your ReactJS project."
+          time="9 min read"
+          link="/"
+          img={article_1}
+          />
+          <FeaturedArticle
+          title="Build A Custom Pagination Component In Reactjs From Scratch"
+          summary="Learn how to build a custom pagination component in ReactJS from scratch. Follow this step-by-step guide to integrate Pagination component in your ReactJS project."
+          time="9 min read"
+          link="/"
+          img={article_2}
+          />
+        </ul>
+        <h2 className='font-bold text-4xl w-full text-center my-16'>All Articles</h2>
+        <ul>
+          <Article
+          title="Form Validation In Reactjs: Build A Reusable Custom Hook For Inputs And Error Handling"
+          date="March 21, 2021"
+          link="/"
+          img={article_3}
+          />
+          <Article
+          title="Form Validation In Reactjs: Build A Reusable Custom Hook For Inputs And Error Handling"
+          date="March 21, 2021"
+          link="/"
+          img={article_4}
+          />
+          <Article
+          title="Form Validation In Reactjs: Build A Reusable Custom Hook For Inputs And Error Handling"
+          date="March 21, 2021"
+          link="/"
+          img={article_5}
+          />
+          <Article
+          title="Form Validation In Reactjs: Build A Reusable Custom Hook For Inputs And Error Handling"
+          date="March 21, 2021"
+          link="/"
+          img={article_3}
+          />
+          <Article
+          title="Form Validation In Reactjs: Build A Reusable Custom Hook For Inputs And Error Handling"
+          date="March 21, 2021"
+          link="/"
+          img={article_3}
+          />
+          <Article
+          title="Form Validation In Reactjs: Build A Reusable Custom Hook For Inputs And Error Handling"
+          date="March 21, 2021"
+          link="/"
+          img={article_4}
+          />
+          <Article
+          title="Form Validation In Reactjs: Build A Reusable Custom Hook For Inputs And Error Handling"
+          date="March 21, 2021"
+          link="/"
+          img={article_5}
+          />
+        </ul>
+      </Layout>
+    </main>
     </>
   )
 }
 
-export default about
+export default articles
